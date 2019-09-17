@@ -378,7 +378,9 @@ summary {
 <pre class="r"><code>library(readxl)</code></pre>
 <div id="load-litters-data" class="section level2">
 <h2>Load Litters Data</h2>
-<pre class="r"><code>litters_data &lt;- read_csv(file = &quot;./data_import_examples/FAS_litters.csv&quot;)</code></pre>
+<pre class="r"><code>#never use read.csv, always use read_csv; .csv allows you to call variables not using full name
+
+litters_data &lt;- read_csv(file = &quot;./data_import_examples/FAS_litters.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   Group = col_character(),
