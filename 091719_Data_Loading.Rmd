@@ -5,16 +5,50 @@ output: html_document
 
 ```{r}
 library(tidyverse)
+library(readxl)
 ```
 
+
+## Load Litters Data
 ```{r}
 litters_data <- read_csv(file = "./data_import_examples/FAS_litters.csv")
 litters_data <- janitor::clean_names(litters_data) #single line of code to clean up names
 ```
 
+
+## Load Pups Data
 ```{r}
 pups_data <- read_csv(file = "./data_import_examples/FAS_pups.csv")
-pups_data <- janitor::clean_names(pups_data) #before the :: is calling specific package, after :: calls function
+pups_data <- janitor::clean_names(pups_data) #before the :: is calling specific package, after :: calls function; 
 
+#skimr::skim(pups_data)  ##a neat trick!
+```
+
+## Play with Column Parsing
+```{r}
+litters_data = read_csv(file = "./data_import_examples/FAS_litters.csv",
+  col_types = cols(
+    Group = col_character(),
+    `Litter Number` = col_character(),
+    `GD0 weight` = col_double(),
+    `GD18 weight` = col_double(),
+    `GD of Birth` = col_integer(),
+    `Pups born alive` = col_integer(),
+    `Pups dead @ birth` = col_integer(),
+    `Pups survive` = col_integer()
+  )
+)
+```
+
+## Read in excel file
+```{r}
+mlb11_data <- read_excel(path = "./data_import_examples/mlb11.xlsx")
+```
+
+## Read in SAS
+```{r}
+library(haven)
+pulse_data = read_sas("./data_import_examples/public_pulse_data.sas7bdat")
+head(pulse_data, 5)
 ```
 
