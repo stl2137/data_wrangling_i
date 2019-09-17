@@ -1,0 +1,20 @@
+---
+title: "Data_Wrangling_i"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+litters_data <- read_csv(file = "./data_import_examples/FAS_litters.csv")
+litters_data <- janitor::clean_names(litters_data) #single line of code to clean up names
+```
+
+```{r}
+pups_data <- read_csv(file = "./data_import_examples/FAS_pups.csv")
+pups_data <- janitor::clean_names(pups_data) #before the :: is calling specific package, after :: calls function
+
+```
+
