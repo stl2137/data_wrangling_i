@@ -789,6 +789,51 @@ arrange(litters_data, pups_born_alive)</code></pre>
 ## # … with 39 more rows, and 2 more variables: pups_dead_birth &lt;dbl&gt;,
 ## #   pups_survive &lt;dbl&gt;</code></pre>
 </div>
+<div id="piping" class="section level2">
+<h2>Piping</h2>
+<p>Create a collection of commands</p>
+<pre class="r"><code>#hot key: shift command m
+liiter_data &lt;- 
+  read_csv(&quot;./data_import_examples/FAS_litters.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(-pups_survive) %&gt;% 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %&gt;% 
+  drop_na(gd0_weight)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Group = col_character(),
+##   `Litter Number` = col_character(),
+##   `GD0 weight` = col_double(),
+##   `GD18 weight` = col_double(),
+##   `GD of Birth` = col_double(),
+##   `Pups born alive` = col_double(),
+##   `Pups dead @ birth` = col_double(),
+##   `Pups survive` = col_double()
+## )</code></pre>
+<pre class="r"><code>litters_data %&gt;% view()
+
+litters_data %&gt;% pull(gd0_weight) %&gt;% mean ()</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>don’t worry about this too much right now!</p>
+<pre class="r"><code>litters_data &lt;- 
+  read_csv(&quot;./data_import_examples/FAS_litters.csv&quot;) %&gt;% 
+  janitor::clean_names(dat = .) %&gt;% 
+  select(.data = ., -pups_survive) %&gt;% 
+  lm(gd18_weight ~ gd0_weight, data = .)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Group = col_character(),
+##   `Litter Number` = col_character(),
+##   `GD0 weight` = col_double(),
+##   `GD18 weight` = col_double(),
+##   `GD of Birth` = col_double(),
+##   `Pups born alive` = col_double(),
+##   `Pups dead @ birth` = col_double(),
+##   `Pups survive` = col_double()
+## )</code></pre>
+</div>
 
 
 
