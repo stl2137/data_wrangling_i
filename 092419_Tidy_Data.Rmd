@@ -1,0 +1,129 @@
+---
+title: "Data_Wrangling_i"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+## LImport Datasets
+```{r}
+#never use read.csv, always use read_csv; .csv allows you to call variables not using full name
+
+litters_data <- read_csv(file = "./data_import_examples/FAS_litters.csv")
+litters_data <- janitor::clean_names(litters_data)
+pups_data <- read_csv(file = "./data_import_examples/FAS_pups.csv")
+pups_data <- janitor::clean_names(pups_data)
+```
+
+
+## Select
+```{r}
+select(litters_data, group, litter_number)
+
+select(litters_data, group, litter_number, gd0_weight)
+
+select(litters_data, group, litter_number, gd0_weight, starts_with("pups"))
+
+# Order matters
+select(litters_data, litter_number, group, gd0_weight)
+
+select(litters_data, litter_number, group, everything())
+
+select(litters_data, -group)
+
+select(litters_data, litter_number, gd0_weight:pups_born_alive)
+
+# Rename
+select(litters_data, GROUP = group, litter_number)
+```
+
+## Filtering
+
+```{r}
+filter(litters_data, group == "Con7")
+
+filter(litters_data, gd_of_birth == 20)
+
+filter(litters_data, gd_of_birth < 20)
+
+filter(litters_data, gd_of_birth >= 20)
+
+filter(litters_data, pups_born_alive < 6)
+
+filter(litters_data, pups_born_alive < 6, group == "Con7")
+
+# Or
+filter(litters_data, group == "Con7" | group == "Mod8")
+filter(litters_data, group %in% c("Con7", "Mod8"))
+
+#Selecting from a range
+filter(litters_data, pups_born_alive >=4, pups_born_alive <= 6)
+
+#Variable a + b < c 
+filter(litters_data, gd0_weight + gd18_weight < 70)
+
+#Missing values
+## Don't do this: 
+##filter(litters_data, is.na(gd0_weight))
+drop_na(litters_data, gd0_weight)
+
+```
+
+## Mutate
+
+```{r}
+mutate(
+  litters_data,
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group),
+  group = str_to_upper(group)
+)
+```
+
+## Arrange
+
+```{r}
+# similar to sort 
+arrange(litters_data, pups_born_alive)
+
+arrange(litters_data, desc(pups_born_alive))
+
+arrange(litters_data, pups_born_alive, gd0_weight)
+```
+
+## Piping
+
+Create a collection of commands
+```{r}
+#hot key: shift command m
+liiter_data <- 
+  read_csv("./data_import_examples/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>% 
+  drop_na(gd0_weight)
+  
+```
+
+```{r, evalFALSE}
+litters_data %>% view()
+
+litters_data %>% pull(gd0_weight) %>% mean ()
+```
+
+don't worry about this too much right now!
+
+```{r}
+litters_data <- 
+  read_csv("./data_import_examples/FAS_litters.csv") %>% 
+  janitor::clean_names(dat = .) %>% 
+  select(.data = ., -pups_survive) %>% 
+  lm(gd18_weight ~ gd0_weight, data = .)
+  
+```
+
